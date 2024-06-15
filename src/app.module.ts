@@ -4,8 +4,8 @@ import { AppService } from "./app.service";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { knexProvider } from "./config/database.config";
 import { UserModule } from "./user/user.module";
-import { WalletserviceModule } from "./walletservice/walletservice.module";
 import { JwtModule, JwtService } from "@nestjs/jwt";
+import { WalletModule } from "./wallet/wallet.module";
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { JwtModule, JwtService } from "@nestjs/jwt";
       inject: [ConfigService],
     }),
     UserModule,
-    WalletserviceModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [AppService, knexProvider],

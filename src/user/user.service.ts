@@ -20,6 +20,7 @@ import {
   UserBlackListedException,
 } from "./exceptions/user.exceptions";
 import { UserApiKeyDto } from "./dto/user-api_key.dto";
+import { UserBalanceDto } from "./dto/user-balance.dto";
 
 @Injectable()
 export class UserService {
@@ -80,9 +81,33 @@ export class UserService {
     return {
       api_key: await this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>("JWT_SECRET"),
-        expiresIn: "1day",
+        expiresIn: "1d",
       }),
     };
+  }
+
+  async getBalance(userBalanceDto: UserBalanceDto) {
+    const user = await this.knex("users")
+      .innerJoin("wallets", "users.id", "wallets.user_id")
+      .select(
+        "users.id",
+        "users.email",
+        "wallets.balance",
+        "wallets.currency_type"
+      )
+      .where({
+        "users.id": userBalanceDto.user_id,
+        "wallets.currency_type": userBalanceDto.currency_type,
+      })
+      .first();
+
+    if (!user) {
+      throw new NotFoundException(
+        "Wallet does not exist for the user id and currency type"
+      );
+    }
+
+    return user;
   }
 
   async getUserEmailByEmail(email: string) {
