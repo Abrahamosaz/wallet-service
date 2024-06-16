@@ -16,30 +16,29 @@ import { TrasnferFundDto } from "./dto/transfer-fund.dto";
 
 @Controller("wallet")
 export class WalletController {
-  constructor(private readonly walletserviceService: WalletService) {}
+  constructor(private readonly walletService: WalletService) {}
 
   @Post("create")
   create(@Body() createWalletserviceDto: CreateWalletserviceDto) {
-    return this.walletserviceService.create(createWalletserviceDto);
+    return this.walletService.create(createWalletserviceDto);
   }
 
   @Get("all/:user_id")
   @UseInterceptors(ClassSerializerInterceptor)
   async getAllUserWallets(@Param("user_id") userId: number) {
-    return this.walletserviceService.getAllUserWallet(userId);
+    return this.walletService.getAllUserWallet(userId);
   }
 
   @Get("transactions")
   @UseInterceptors(ClassSerializerInterceptor)
   async getAllWalletTransactions() {
-    return await this.walletserviceService.getAllTransactions();
+    return await this.walletService.getAllTransactions();
   }
 
   @Put("fund")
   @UseInterceptors(ClassSerializerInterceptor)
   async fundAccount(@Body() fundAccountDto: FundWithdrawDto) {
-    const fundedWallet =
-      await this.walletserviceService.fundAccount(fundAccountDto);
+    const fundedWallet = await this.walletService.fundAccount(fundAccountDto);
 
     const res = {
       ...fundedWallet,
@@ -50,11 +49,12 @@ export class WalletController {
 
   @Put("transfer")
   async transferFund(@Body() tranferFundDto: TrasnferFundDto) {
-    return await this.walletserviceService.transferFund(tranferFundDto);
+    return await this.walletService.transferFund(tranferFundDto);
   }
 
   @Put("withdraw")
+  @UseInterceptors(ClassSerializerInterceptor)
   async withdrawFund(@Body() withdrawFundDto: FundWithdrawDto) {
-    return await this.walletserviceService.withdrawFund(withdrawFundDto);
+    return await this.walletService.withdrawFund(withdrawFundDto);
   }
 }

@@ -17,7 +17,6 @@ describe("UserController", () => {
     })
       .overrideProvider(UserService)
       .useValue(MockUserService)
-
       .compile();
 
     userController = module.get<UserController>(UserController);

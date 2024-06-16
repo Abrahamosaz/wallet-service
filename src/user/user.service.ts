@@ -63,7 +63,7 @@ export class UserService {
         return newUser;
       } catch (err) {
         await trx.rollback();
-        throw new InternalServerErrorException(err.response.message);
+        throw err;
       }
     }
   }
@@ -100,7 +100,7 @@ export class UserService {
       };
     } catch (err) {
       trx.rollback();
-      throw new InternalServerErrorException(err.response.message);
+      throw err;
     }
   }
 
@@ -134,7 +134,7 @@ export class UserService {
     } catch (err) {
       console.log("error", err);
       await trx.rollback();
-      throw new InternalServerErrorException(err.response.message);
+      throw err;
     }
   }
 

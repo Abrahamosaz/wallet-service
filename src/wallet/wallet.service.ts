@@ -55,7 +55,7 @@ export class WalletService {
       return newWallet;
     } catch (err) {
       await trx.rollback();
-      throw new InternalServerErrorException();
+      throw err;
     }
   }
 
@@ -82,8 +82,7 @@ export class WalletService {
         );
       }
 
-      const amount =
-        fundAccountDto.amount + parseInt(selectedWallet.balance, 10);
+      const amount = fundAccountDto.amount + Number(selectedWallet.balance);
       await this.updateWalletBalance(selectedWallet, amount);
 
       const updatedWallet = await this.knex("wallets")
@@ -95,6 +94,7 @@ export class WalletService {
       // add transaction
       await this.addTransaction({
         wallet_id: selectedWallet.id,
+        to_wallet_id: selectedWallet.id,
         transaction_type: "fund",
         amount: fundAccountDto.amount,
         currency_type: fundAccountDto.currency_type,
@@ -104,7 +104,7 @@ export class WalletService {
       return updatedWallet;
     } catch (err) {
       await trx.rollback();
-      throw new InternalServerErrorException();
+      throw err;
     }
   }
 
@@ -158,7 +158,7 @@ export class WalletService {
       return "transfer successful";
     } catch (err) {
       await trx.rollback();
-      throw new InternalServerErrorException();
+      throw err;
     }
   }
 
@@ -177,20 +177,21 @@ export class WalletService {
         );
       }
 
-      if (withdrawFund.amount > parseInt(wallet.balance, 10)) {
+      if (withdrawFund.amount > Number(wallet.balance)) {
         throw new BadRequestException("Insuficient funds to withdraw");
       }
 
-      const amount = withdrawFund.amount - parseInt(wallet.balance, 10);
+      const amount = Number(wallet.balance) - withdrawFund.amount;
       await this.updateWalletBalance(wallet, amount);
 
-      const updatedWallet = await this.knex("wallets").where({
+      const [updatedWallet] = await this.knex("wallets").where({
         id: wallet.id,
       });
 
       // add transaction
       await this.addTransaction({
         wallet_id: wallet.id,
+        to_wallet_id: wallet.id,
         transaction_type: "withdraw",
         amount: withdrawFund.amount,
         currency_type: withdrawFund.currency_type,
@@ -202,8 +203,9 @@ export class WalletService {
         withdraw_fund: amount,
       });
     } catch (err) {
+      console.log("withdraw", err);
       await trx.rollback();
-      throw new InternalServerErrorException();
+      throw err;
     }
   }
 
@@ -217,7 +219,7 @@ export class WalletService {
       return transactions.map((trx) => new TransactionEntity(trx));
     } catch (err) {
       await trx.rollback();
-      throw new InternalServerErrorException();
+      throw err;
     }
   }
 
