@@ -4,23 +4,22 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { axiosConfig } from "src/config/axios.config";
 import { ConfigService } from "@nestjs/config";
 import { Knex } from "knex";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { UserEntity } from "./entities/user.entity";
 import {
   EmailAlreadyExistsException,
   UserBlackListedException,
 } from "./exceptions/user.exceptions";
 import { UserApiKeyDto } from "./dto/user-api_key.dto";
 import { UserBalanceDto } from "./dto/user-balance.dto";
+import { axiosConfig } from "src/config/axios.config";
 
 @Injectable()
 export class UserService {
@@ -35,6 +34,8 @@ export class UserService {
     const email = createUserDto.email;
     const client = axiosConfig(this.configService);
 
+    const trx = await this.knex.transaction();
+
     try {
       const res = await client.get(`/verification/karma/${email}`);
       if (res.status === 200) {
@@ -48,66 +49,93 @@ export class UserService {
       }
 
       const hashPassword = await this.generateHash(createUserDto.password);
-      const [userId] = await this.knex("users").insert({
-        ...createUserDto,
-        password: hashPassword,
-      });
 
-      // Retrieve the newly created user
-      const [newUser] = await this.knex("users").where({ id: userId });
+      try {
+        const [userId] = await trx("users").insert({
+          ...createUserDto,
+          password: hashPassword,
+        });
 
-      return newUser;
+        // Retrieve the newly created user
+        const [newUser] = await trx("users").where({ id: userId });
+
+        await trx.commit();
+        return newUser;
+      } catch (err) {
+        await trx.rollback();
+        throw new InternalServerErrorException(err.response.message);
+      }
     }
   }
 
   async getApiKey(userApiKeyDto: UserApiKeyDto) {
+    const trx = await this.knex.transaction();
+
     const email = userApiKeyDto.email;
-    const [user] = await this.knex("users").where({ email });
 
-    if (!user) {
-      throw new NotFoundException("user not found, register to get api key");
+    try {
+      const [user] = await this.knex("users").where({ email });
+
+      if (!user) {
+        throw new NotFoundException("user not found, register to get api key");
+      }
+
+      const isMatch = await this.verifyPasswordHash(
+        user.password,
+        userApiKeyDto.password
+      );
+
+      if (!isMatch) {
+        throw new UnauthorizedException("Invalid credentials");
+      }
+
+      const payload = { sub: user.id, email: user.email };
+
+      await trx.commit();
+      return {
+        api_key: await this.jwtService.signAsync(payload, {
+          secret: this.configService.get<string>("JWT_SECRET"),
+          expiresIn: "1d",
+        }),
+      };
+    } catch (err) {
+      trx.rollback();
+      throw new InternalServerErrorException(err.response.message);
     }
-
-    const isMatch = await this.verifyPasswordHash(
-      user.password,
-      userApiKeyDto.password
-    );
-
-    if (!isMatch) {
-      throw new UnauthorizedException("Invalid credentials");
-    }
-
-    const payload = { sub: user.id, email: user.email };
-    return {
-      api_key: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>("JWT_SECRET"),
-        expiresIn: "1d",
-      }),
-    };
   }
 
   async getBalance(userBalanceDto: UserBalanceDto) {
-    const user = await this.knex("users")
-      .innerJoin("wallets", "users.id", "wallets.user_id")
-      .select(
-        "users.id",
-        "users.email",
-        "wallets.balance",
-        "wallets.currency_type"
-      )
-      .where({
-        "users.id": userBalanceDto.user_id,
-        "wallets.currency_type": userBalanceDto.currency_type,
-      })
-      .first();
+    const trx = await this.knex.transaction();
 
-    if (!user) {
-      throw new NotFoundException(
-        "Wallet does not exist for the user id and currency type"
-      );
+    try {
+      const user = await this.knex("users")
+        .innerJoin("wallets", "users.id", "wallets.user_id")
+        .select(
+          "users.id",
+          "users.email",
+          "wallets.balance",
+          "wallets.currency_type"
+        )
+        .where({
+          "users.id": userBalanceDto.user_id,
+          "wallets.currency_type": userBalanceDto.currency_type,
+        })
+        .first();
+
+      await trx.commit();
+
+      if (!user) {
+        throw new NotFoundException(
+          "Wallet does not exist for the user id and currency type"
+        );
+      }
+
+      return user;
+    } catch (err) {
+      console.log("error", err);
+      await trx.rollback();
+      throw new InternalServerErrorException(err.response.message);
     }
-
-    return user;
   }
 
   async getUserEmailByEmail(email: string) {

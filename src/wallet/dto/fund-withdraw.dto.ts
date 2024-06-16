@@ -1,6 +1,6 @@
-import { IsDecimal, IsInt, IsString } from "class-validator";
+import { IsInt, IsString } from "class-validator";
 
-export class FundAccountDto {
+export class FundWithdrawDto {
   @IsInt()
   user_id: number;
 

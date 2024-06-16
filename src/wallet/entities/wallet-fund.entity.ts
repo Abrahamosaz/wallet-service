@@ -5,6 +5,7 @@ export class WalletEntity {
   user_id: number;
   balance: number;
   currency_type: string;
+  withdraw_fund?: number;
 
   @Exclude()
   created_at: string;

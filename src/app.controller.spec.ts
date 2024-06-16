@@ -15,7 +15,7 @@ describe("AppController", () => {
   });
 
   describe("root", () => {
-    it('should return "Hello World!"', () => {
+    it('should return "ping from server!"', () => {
       expect(appController.getServeresponse()).toBe("ping from server!");
     });
   });

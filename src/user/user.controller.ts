@@ -25,7 +25,7 @@ export class UserController {
 
   @Get("balance/:user_id")
   async getUserBalance(
-    @Param("user_id") user_id,
+    @Param("user_id") user_id: number,
     @Query("currency_type") currency_type: string
   ) {
     if (!currency_type) {

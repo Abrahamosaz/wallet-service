@@ -19,7 +19,8 @@ export async function up(knex: Knex): Promise<void> {
       .unsigned()
       .nullable()
       .references("id")
-      .inTable("wallets"); // For transfer
+      .inTable("wallets")
+      .defaultTo(0); // For transfer
     table.timestamps(true, true);
   });
 }

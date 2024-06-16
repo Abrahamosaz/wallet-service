@@ -10,8 +10,8 @@ import {
 } from "@nestjs/common";
 import { WalletService } from "./wallet.service";
 import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
-import { FundAccountDto } from "./dto/fund-account.dto";
-import { WalletEntity } from "./entities/walletservice.entity";
+import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
+import { WalletEntity } from "./entities/wallet-fund.entity";
 import { TrasnferFundDto } from "./dto/transfer-fund.dto";
 
 @Controller("wallet")
@@ -29,8 +29,15 @@ export class WalletController {
     return this.walletserviceService.getAllUserWallet(userId);
   }
 
+  @Get("transactions")
+  @UseInterceptors(ClassSerializerInterceptor)
+  async getAllWalletTransactions() {
+    return await this.walletserviceService.getAllTransactions();
+  }
+
   @Put("fund")
-  async fundAccount(@Body() fundAccountDto: FundAccountDto) {
+  @UseInterceptors(ClassSerializerInterceptor)
+  async fundAccount(@Body() fundAccountDto: FundWithdrawDto) {
     const fundedWallet =
       await this.walletserviceService.fundAccount(fundAccountDto);
 
@@ -44,5 +51,10 @@ export class WalletController {
   @Put("transfer")
   async transferFund(@Body() tranferFundDto: TrasnferFundDto) {
     return await this.walletserviceService.transferFund(tranferFundDto);
+  }
+
+  @Put("withdraw")
+  async withdrawFund(@Body() withdrawFundDto: FundWithdrawDto) {
+    return await this.walletserviceService.withdrawFund(withdrawFundDto);
   }
 }

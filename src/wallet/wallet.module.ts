@@ -3,7 +3,6 @@ import { WalletService } from "./wallet.service";
 import { WalletController } from "./wallet.controller";
 import { knexProvider } from "src/config/database.config";
 import { UserService } from "src/user/user.service";
-import { UserModule } from "src/user/user.module";
 import { JwtService } from "@nestjs/jwt";
 
 @Module({
