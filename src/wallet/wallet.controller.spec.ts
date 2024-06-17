@@ -5,6 +5,8 @@ import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
 import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
 import { MockWalletService } from "../../test/mocks/wallet.service.mock";
 import { TrasnferFundDto } from "./dto/transfer-fund.dto";
+import { ApiKeyGuard } from "src/guards/apiKeyGuard";
+import { MockApiKeyGuard } from "../../test/mocks/apiKeyGuard.mock";
 
 describe("WalletController", () => {
   let walletController: WalletController;
@@ -20,6 +22,8 @@ describe("WalletController", () => {
       controllers: [WalletController],
       providers: [WalletService],
     })
+      .overrideGuard(ApiKeyGuard)
+      .useClass(MockApiKeyGuard)
       .overrideProvider(WalletService)
       .useValue(MockWalletService)
       .compile();

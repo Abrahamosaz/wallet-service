@@ -7,14 +7,17 @@ import {
   Put,
   ClassSerializerInterceptor,
   UseInterceptors,
+  UseGuards,
 } from "@nestjs/common";
 import { WalletService } from "./wallet.service";
 import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
 import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
 import { WalletEntity } from "./entities/wallet-fund.entity";
 import { TrasnferFundDto } from "./dto/transfer-fund.dto";
+import { ApiKeyGuard } from "src/guards/apiKeyGuard";
 
 @Controller("wallet")
+@UseGuards(ApiKeyGuard)
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 

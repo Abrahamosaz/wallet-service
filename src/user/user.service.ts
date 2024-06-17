@@ -1,14 +1,10 @@
 import {
-  ForbiddenException,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/createUser.dto";
 import { ConfigService } from "@nestjs/config";
 import { Knex } from "knex";
 import { JwtService } from "@nestjs/jwt";
@@ -17,8 +13,8 @@ import {
   EmailAlreadyExistsException,
   UserBlackListedException,
 } from "./exceptions/user.exceptions";
-import { UserApiKeyDto } from "./dto/user-api_key.dto";
-import { UserBalanceDto } from "./dto/user-balance.dto";
+import { UserApiKeyDto } from "./dto/userApiKey.dto";
+import { UserBalanceDto } from "./dto/userBalance.dto";
 import { axiosConfig } from "src/config/axios.config";
 
 @Injectable()
@@ -74,7 +70,7 @@ export class UserService {
     const email = userApiKeyDto.email;
 
     try {
-      const [user] = await this.knex("users").where({ email });
+      const [user] = await trx("users").where({ email });
 
       if (!user) {
         throw new NotFoundException("user not found, register to get api key");
@@ -108,7 +104,7 @@ export class UserService {
     const trx = await this.knex.transaction();
 
     try {
-      const user = await this.knex("users")
+      const user = await trx("users")
         .innerJoin("wallets", "users.id", "wallets.user_id")
         .select(
           "users.id",
@@ -132,7 +128,6 @@ export class UserService {
 
       return user;
     } catch (err) {
-      console.log("error", err);
       await trx.rollback();
       throw err;
     }

@@ -2,9 +2,11 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { UserController } from "./user.controller";
 import { UserService } from "./user.service";
 import { MockUserService } from "../../test/mocks/user.service.mock";
-import { CreateUserDto } from "./dto/create-user.dto";
+import { CreateUserDto } from "./dto/createUser.dto";
 import { UserEntity } from "./entities/user.entity";
-import { UserApiKeyDto } from "./dto/user-api_key.dto";
+import { UserApiKeyDto } from "./dto/userApiKey.dto";
+import { ApiKeyGuard } from "src/guards/apiKeyGuard";
+import { MockApiKeyGuard } from "../../test/mocks/apiKeyGuard.mock";
 
 describe("UserController", () => {
   let userController: UserController;
@@ -15,6 +17,8 @@ describe("UserController", () => {
       controllers: [UserController],
       providers: [UserService],
     })
+      .overrideGuard(ApiKeyGuard)
+      .useClass(MockApiKeyGuard)
       .overrideProvider(UserService)
       .useValue(MockUserService)
       .compile();
@@ -74,6 +78,7 @@ describe("UserController", () => {
       expect(await userController.getUserBalance(1, "dollar")).toEqual({
         id: 1,
         balance: 20,
+        currency_type: "dollar",
       });
 
       expect(userService.getBalance).toHaveBeenCalledTimes(1);

@@ -15,5 +15,6 @@ export const MockUserService = {
   getBalance: jest.fn().mockResolvedValue({
     id: expect.any(Number),
     balance: expect.any(Number),
+    currency_type: "dollar",
   }),
 };

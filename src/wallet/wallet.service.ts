@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
-import { Knex } from "knex";
+import knex, { Knex } from "knex";
 import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
 import { WalletEntity } from "./entities/wallet-fund.entity";
 import { TrasnferFundDto } from "./dto/transfer-fund.dto";
@@ -45,11 +45,11 @@ export class WalletService {
         );
       }
 
-      const [walletId] = await this.knex("wallets").insert({
+      const [walletId] = await trx("wallets").insert({
         ...createWalletserviceDto,
       });
 
-      const [newWallet] = await this.knex("wallets").where({ id: walletId });
+      const [newWallet] = await trx("wallets").where({ id: walletId });
       await trx.commit();
 
       return newWallet;
@@ -85,7 +85,7 @@ export class WalletService {
       const amount = fundAccountDto.amount + Number(selectedWallet.balance);
       await this.updateWalletBalance(selectedWallet, amount);
 
-      const updatedWallet = await this.knex("wallets")
+      const updatedWallet = await trx("wallets")
         .where({
           id: selectedWallet.id,
         })
@@ -213,7 +213,7 @@ export class WalletService {
     const trx = await this.knex.transaction();
 
     try {
-      const transactions = await this.knex.select("*").from("transactions");
+      const transactions = await trx.select("*").from("transactions");
       await trx.commit();
 
       return transactions.map((trx) => new TransactionEntity(trx));
