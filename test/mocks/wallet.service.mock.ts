@@ -33,4 +33,15 @@ export const MockWalletService = {
     balance: "10.00",
     withdraw_fund: 10,
   }),
+
+  getAllTransactions: jest.fn().mockResolvedValueOnce([
+    {
+      id: 3,
+      wallet_id: 1,
+      transaction_type: "fund",
+      amount: "20.00",
+      currency_type: "dollar",
+      to_wallet_id: 1,
+    },
+  ]),
 };

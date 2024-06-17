@@ -12,7 +12,7 @@ import { UserApiKeyDto } from "src/user/dto/userApiKey.dto";
 import { MockApiKeyGuard } from "./mocks/apiKeyGuard.mock";
 import { ApiKeyGuard } from "src/guards/apiKeyGuard";
 
-describe("AppController (e2e)", () => {
+describe("UserController (e2e)", () => {
   let user: INestApplication;
 
   beforeEach(async () => {
