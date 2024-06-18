@@ -10,10 +10,10 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { WalletService } from "./wallet.service";
-import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
-import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
+import { CreateWalletserviceDto } from "./dto/createWallet.dto";
+import { FundWithdrawDto } from "./dto/fundWithdraw.dto";
 import { WalletEntity } from "./entities/wallet-fund.entity";
-import { TrasnferFundDto } from "./dto/transfer-fund.dto";
+import { TrasnferFundDto } from "./dto/transferFund.dto";
 import { ApiKeyGuard } from "src/guards/apiKeyGuard";
 
 @Controller("wallet")

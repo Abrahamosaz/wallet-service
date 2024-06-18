@@ -5,11 +5,11 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from "@nestjs/common";
-import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
+import { CreateWalletserviceDto } from "./dto/createWallet.dto";
 import knex, { Knex } from "knex";
-import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
+import { FundWithdrawDto } from "./dto/fundWithdraw.dto";
 import { WalletEntity } from "./entities/wallet-fund.entity";
-import { TrasnferFundDto } from "./dto/transfer-fund.dto";
+import { TrasnferFundDto } from "./dto/transferFund.dto";
 import { TransactionEntity } from "./entities/transactions.entity";
 import { UserService } from "src/user/user.service";
 

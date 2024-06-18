@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { WalletController } from "./wallet.controller";
 import { WalletService } from "./wallet.service";
-import { CreateWalletserviceDto } from "./dto/create-walletservice.dto";
-import { FundWithdrawDto } from "./dto/fund-withdraw.dto";
+import { CreateWalletserviceDto } from "./dto/createWallet.dto";
+import { FundWithdrawDto } from "./dto/fundWithdraw.dto";
 import { MockWalletService } from "../../test/mocks/wallet.service.mock";
-import { TrasnferFundDto } from "./dto/transfer-fund.dto";
+import { TrasnferFundDto } from "./dto/transferFund.dto";
 import { ApiKeyGuard } from "src/guards/apiKeyGuard";
 import { MockApiKeyGuard } from "../../test/mocks/apiKeyGuard.mock";
 

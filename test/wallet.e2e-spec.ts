@@ -11,7 +11,7 @@ import { MockUserService } from "./mocks/user.service.mock";
 import { MockApiKeyGuard } from "./mocks/apiKeyGuard.mock";
 import { ApiKeyGuard } from "src/guards/apiKeyGuard";
 import { MockWalletService } from "./mocks/wallet.service.mock";
-import { FundWithdrawDto } from "src/wallet/dto/fund-withdraw.dto";
+import { FundWithdrawDto } from "src/wallet/dto/fundWithdraw.dto";
 
 describe("AppController (e2e)", () => {
   let wallet: INestApplication;

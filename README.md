@@ -1,6 +1,8 @@
 # wallet service(lendsqr backend test)
 
-This is a wallet service api that is created for the backend test of lendsqr. This api is a simple wallet service, where a user can be able to fund their account, transfer funds and withdraw funds from their account
+This is a wallet service api that is created for the backend test of lendsqr. This api is a simple wallet service, where a user can be able to fund their account, transfer funds and withdraw funds from their account.
+
+Due to the fact that the api was hosted on render free service, the service instance will spin down with inactivity, which can delay requests by 50 seconds or more. please be patient when making initial request as this might take some time to become active.
 
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
@@ -12,7 +14,7 @@ The wallet service api is a simple api that enable a user to create wallets for 
 A user can have at most two wallet, which is a dollar and naira wallet, user can fund their wallet by specifying the currency type. example is getting a balance of a user by specifying the currency type
 
 ```
-request - http://localhost/balance/1/?currency_type=dollar
+request - https://abraham-lendsqr-be-test.onrender.com/balance/1/?currency_type=dollar
 ```
 
 This api endpoint obtain the balance of a user wallet base on the currency type specified.
@@ -46,7 +48,7 @@ request body
 
 ```
 
-response
+response 201 OK
 
 ```
 {
@@ -58,6 +60,15 @@ response
     "date_of_birth": "2001-02-23T00:00:00.000Z",
     "created_at": "2024-06-18T18:00:50.000Z",
     "updated_at": "2024-06-18T18:00:50.000Z"
+}
+```
+
+response (email already exist) 409
+
+```
+{
+    "statusCode": 409,
+    "message": "User with email already exists"
 }
 ```
 
@@ -74,11 +85,21 @@ request body
 }
 ```
 
-response
+response 200 OK
 
 ```
 {
     "api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWJyYWhhbW9zYXplZTNAZ21haWwuY29tIiwiaWF0IjoxNzE4NzMzODQ3LCJleHAiOjE3MTg4MjAyNDd9.vf53IqRi9zx4bsPQKH9t6J0ZuTyJmGmu8EHIbfQmqZc"
+}
+```
+
+response (invalid credentials) 401
+
+```
+{
+    "message": "Invalid credentials",
+    "error": "Unauthorized",
+    "statusCode": 401
 }
 ```
 
@@ -110,7 +131,7 @@ request body
 }
 ```
 
-response
+response 200 OK
 
 ```
 {
@@ -120,6 +141,16 @@ response
     "balance": "0.00",
     "created_at": "2024-06-18T18:11:09.000Z",
     "updated_at": "2024-06-18T18:11:09.000Z"
+}
+```
+
+response (creating wallet with invalid user id) 404
+
+```
+{
+    "message": "user with this id not found",
+    "error": "Not Found",
+    "statusCode": 404
 }
 ```
 
@@ -137,7 +168,7 @@ request body
 }
 ```
 
-response
+response 200 OK
 
 ```
 {
@@ -148,13 +179,24 @@ response
 }
 ```
 
+response (wallet does not exist for user id) 404
+
+```
+{
+    "message": "wallet of dollar for user id does not exist, create a wallet to fund account",
+    "error": "Not Found",
+    "statusCode": 404
+}
+```
+
 ### transfer funds (PUT) request
 
 url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/transfer
 
 request body
 
-```{
+```
+{
     "from_user_id": 1,
     "to_user_id": 2,
     "currency_type": "dollar",
@@ -163,13 +205,33 @@ request body
 
 ```
 
-response
+response 200 OK
 
 ```
 transfer successful
 ```
 
 After transfering funds, you can check the user balance to ensure that funds was transfer succesfully
+
+response (transfering from a user id that does not exist) 404
+
+```
+{
+    "message": "wallet does not exist for the sender user id, create a wallet to transfer fund",
+    "error": "Not Found",
+    "statusCode": 404
+}
+```
+
+response (transfering to a user id that does not exist) 404
+
+```
+{
+    "message": "wallet does not exist for the recepient user id, create a wallet to transfer fund",
+    "error": "Not Found",
+    "statusCode": 404
+}
+```
 
 ### withdraw funds
 
@@ -185,7 +247,7 @@ request body
 }
 ```
 
-response
+response 200 OK
 
 ```
 {
@@ -194,6 +256,16 @@ response
     "currency_type": "dollar",
     "balance": "50.00",
     "withdraw_fund": 10
+}
+```
+
+response (withdraw from a user id that does not exist) 404
+
+```
+{
+    "message": "wallet with user id and currency type does not eixst",
+    "error": "Not Found",
+    "statusCode": 404
 }
 ```
 
