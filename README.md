@@ -27,63 +27,175 @@ this schema show the relationship between tables and how the api service works o
 
 wallet service api is a simple to use api, below are the endpoint available in the walllet service api. relative url should be appended to the baseurl when making api calls.
 
-base url: http://localost/api
+### create a user (POST) request
 
-### OnBoarding a user
+url - https://abraham-lendsqr-be-test.onrender.com/api/user/register
 
-```
-route  - /user/register (POST) request
-```
-
-### getting api key to authenticate the api
+request body
 
 ```
-route - /user/api_key (POST) request
-```
-
-### creating a wallet
-
-```
-route - /wallet/create (POST) request
-```
-
-### fund a user wallet
-
-```
-route - /wallet/fund (PUT) request
-```
-
-### transfer funds from user wallet
+{
+    "email": "abrahamosazee2@gmail.com",
+    "first_name": "abraham",
+    "last_name": "osazee",
+    "phonenumber": "08061909748",
+    "date_of_birth": "2001-02-23",
+    "password": "Omorisiagbon123",
+    "confirmPassword": "Omorisiagbon123"
+}
 
 ```
-route - /wallet/transfer (PUT) request
-```
 
-### withdraw funds from user wallet
+response
 
 ```
-route - /wallet/withdraw (PUT) request
+{
+    "id": 2,
+    "email": "abrahamosazee2@gmail.com",
+    "first_name": "abraham",
+    "last_name": "osazee",
+    "phonenumber": "08061909748",
+    "date_of_birth": "2001-02-23T00:00:00.000Z",
+    "created_at": "2024-06-18T18:00:50.000Z",
+    "updated_at": "2024-06-18T18:00:50.000Z"
+}
 ```
 
-### get all user wallets
+### get api key to authenticate endpoints (POST) request
+
+url - https://abraham-lendsqr-be-test.onrender.com/api/user/api_key
+
+request body
 
 ```
-route - /wallet/all/:user_id (GET) request
+{
+    "email": "abrahamosazee3@gmail.com",
+    "password": "Omorisiagbon123"
+}
 ```
 
-### get user balance of wallet base on the currency type
+response
 
 ```
-route - /user/balance/:user_id?currency_type=<currency_type(dollar | naira)> (GET) request
+{
+    "api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWJyYWhhbW9zYXplZTNAZ21haWwuY29tIiwiaWF0IjoxNzE4NzMzODQ3LCJleHAiOjE3MTg4MjAyNDd9.vf53IqRi9zx4bsPQKH9t6J0ZuTyJmGmu8EHIbfQmqZc"
+}
 ```
 
-### get all transactions of wallets
+### get user balance GET request (ensure that user with id has created a wallet of currency_type)
+
+url - https://abraham-lendsqr-be-test.onrender.com/api/user/balance/1?currency_type=dollar
+
+response
 
 ```
-route - /wallets/transactions (GET) request
+{
+    "id": 1,
+    "email": "abrahamosazee3@gmail.com",
+    "balance": "60.00",
+    "currency_type": "dollar"
+}
 ```
 
-## Api Examples
+### create wallet (POST) request
+
+url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/create
+
+request body
+
+```
+{
+    "user_id": 2,
+    "currency_type": "dollar"
+}
+```
+
+response
+
+```
+{
+    "id": 2,
+    "user_id": 2,
+    "currency_type": "dollar",
+    "balance": "0.00",
+    "created_at": "2024-06-18T18:11:09.000Z",
+    "updated_at": "2024-06-18T18:11:09.000Z"
+}
+```
+
+### fund user wallet (PUT) request
+
+url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/fund
+
+request body
+
+```
+{
+    "user_id": 1,
+    "currency_type": "dollar",
+    "amount": 60
+}
+```
+
+response
+
+```
+{
+    "id": 1,
+    "user_id": 1,
+    "currency_type": "dollar",
+    "balance": "60.00"
+}
+```
+
+### transfer funds (PUT) request
+
+url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/transfer
+
+request body
+
+```{
+    "from_user_id": 1,
+    "to_user_id": 2,
+    "currency_type": "dollar",
+    "amount": 10
+}
+
+```
+
+response
+
+```
+transfer successful
+```
+
+After transfering funds, you can check the user balance to ensure that funds was transfer succesfully
+
+### withdraw funds
+
+url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/withdraw
+
+request body
+
+```
+{
+    "user_id": 1,
+    "currency_type": "dollar",
+    "amount": 10
+}
+```
+
+response
+
+```
+{
+    "id": 1,
+    "user_id": 1,
+    "currency_type": "dollar",
+    "balance": "50.00",
+    "withdraw_fund": 10
+}
+```
 
 ## Stay in touch
 

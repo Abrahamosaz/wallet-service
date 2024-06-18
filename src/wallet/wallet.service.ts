@@ -200,7 +200,7 @@ export class WalletService {
       await trx.commit();
       return new WalletEntity({
         ...updatedWallet,
-        withdraw_fund: amount,
+        withdraw_fund: withdrawFund.amount,
       });
     } catch (err) {
       console.log("withdraw", err);
