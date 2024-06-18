@@ -1,73 +1,96 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# wallet service(lendsqr backend test)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a wallet service api that is created for the backend test of lendsqr. This api is a simple wallet service, where a user can be able to fund their account, transfer funds and withdraw funds from their account
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The wallet service api is a simple api that enable a user to create wallets for funding, receiving and transfering funds from one user wallet to another. From this backend api wallet service that can be consumed, a user can create mutiple wallets depending on the currency type specific when creating the wallet.
 
-## Installation
+A user can have at most two wallet, which is a dollar and naira wallet, user can fund their wallet by specifying the currency type. example is getting a balance of a user by specifying the currency type
 
-```bash
-$ npm install
+```
+request - http://localhost/balance/1/?currency_type=dollar
 ```
 
-## Running the app
+This api endpoint obtain the balance of a user wallet base on the currency type specified.
 
-```bash
-# development
-$ npm run start
+## schema
 
-# watch mode
-$ npm run start:dev
+![alt text](wallet_service_schema.png)
 
-# production mode
-$ npm run start:prod
+this schema show the relationship between tables and how the api service works on the database layer.
+
+## Api documentation
+
+wallet service api is a simple to use api, below are the endpoint available in the walllet service api. relative url should be appended to the baseurl when making api calls.
+
+base url: http://localost/api
+
+### OnBoarding a user
+
+```
+route  - /user/register (POST) request
 ```
 
-## Test
+### getting api key to authenticate the api
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+route - /user/api_key (POST) request
 ```
 
-## Support
+### creating a wallet
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+route - /wallet/create (POST) request
+```
+
+### fund a user wallet
+
+```
+route - /wallet/fund (PUT) request
+```
+
+### transfer funds from user wallet
+
+```
+route - /wallet/transfer (PUT) request
+```
+
+### withdraw funds from user wallet
+
+```
+route - /wallet/withdraw (PUT) request
+```
+
+### get all user wallets
+
+```
+route - /wallet/all/:user_id (GET) request
+```
+
+### get user balance of wallet base on the currency type
+
+```
+route - /user/balance/:user_id?currency_type=<currency_type(dollar | naira)> (GET) request
+```
+
+### get all transactions of wallets
+
+```
+route - /wallets/transactions (GET) request
+```
+
+## Api Examples
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - Omorisiagbon Abraham
+- linkedin - [https://www.linkedin.com/in/abraham-omorisiagbon-619796233/](https://www.linkedin.com/in/abraham-omorisiagbon-619796233/)
+- Twitter - [abrahamoz\_](https://x.com/abrahamoz_)
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+lendsqr wallet service backend test is [MIT licensed](LICENSE).
