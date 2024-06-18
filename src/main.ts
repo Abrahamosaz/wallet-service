@@ -12,5 +12,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
+
+  const port = process.env.PORT || 3000; // Use environment variable or default to 3000
+  await app.listen(port);
 }
+
 bootstrap();
