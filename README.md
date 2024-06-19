@@ -13,6 +13,8 @@ The wallet service api is a simple api that enable a user to create wallets for 
 
 A user can have at most two wallet, which is a dollar and naira wallet, user can fund their wallet by specifying the currency type. example is getting a balance of a user by specifying the currency type
 
+https://docs.google.com/document/d/13ySlMcMX8wTVkaXDDlWFJ3zNYsHOv-JkTQMBTmRC8X8/edit - this is a link to google doc explaining more about my implementation
+
 ```
 request - https://abraham-lendsqr-be-test.onrender.com/balance/1/?currency_type=dollar
 ```
