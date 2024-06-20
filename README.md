@@ -35,42 +35,43 @@ wallet service api is a simple to use api, below are the endpoint available in t
 
 url - https://abraham-lendsqr-be-test.onrender.com/api/user/register
 
+user with records in the Lendsqr Adjutor [karma blacklist](https://www.google.com/url?q=https%3A%2F%2Fapi.adjutor.io&sa=D&source=docs) can't register as a user on this api service
+
 request body
 
-```
+```json
 {
-    "email": "abrahamosazee2@gmail.com",
-    "first_name": "abraham",
-    "last_name": "osazee",
-    "phonenumber": "08061909748",
-    "date_of_birth": "2001-02-23",
-    "password": "Omorisiagbon123",
-    "confirmPassword": "Omorisiagbon123"
+  "email": "abrahamosazee2@gmail.com",
+  "first_name": "abraham",
+  "last_name": "osazee",
+  "phonenumber": "08061909748",
+  "date_of_birth": "2001-02-23",
+  "password": "Omorisiagbon123",
+  "confirmPassword": "Omorisiagbon123"
 }
-
 ```
 
 response 201 OK
 
-```
+```json
 {
-    "id": 2,
-    "email": "abrahamosazee2@gmail.com",
-    "first_name": "abraham",
-    "last_name": "osazee",
-    "phonenumber": "08061909748",
-    "date_of_birth": "2001-02-23T00:00:00.000Z",
-    "created_at": "2024-06-18T18:00:50.000Z",
-    "updated_at": "2024-06-18T18:00:50.000Z"
+  "id": 2,
+  "email": "abrahamosazee2@gmail.com",
+  "first_name": "abraham",
+  "last_name": "osazee",
+  "phonenumber": "08061909748",
+  "date_of_birth": "2001-02-23T00:00:00.000Z",
+  "created_at": "2024-06-18T18:00:50.000Z",
+  "updated_at": "2024-06-18T18:00:50.000Z"
 }
 ```
 
 response (email already exist) 409
 
-```
+```json
 {
-    "statusCode": 409,
-    "message": "User with email already exists"
+  "statusCode": 409,
+  "message": "User with email already exists"
 }
 ```
 
@@ -80,28 +81,28 @@ url - https://abraham-lendsqr-be-test.onrender.com/api/user/api_key
 
 request body
 
-```
+```json
 {
-    "email": "abrahamosazee3@gmail.com",
-    "password": "Omorisiagbon123"
+  "email": "abrahamosazee3@gmail.com",
+  "password": "Omorisiagbon123"
 }
 ```
 
 response 200 OK
 
-```
+```json
 {
-    "api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWJyYWhhbW9zYXplZTNAZ21haWwuY29tIiwiaWF0IjoxNzE4NzMzODQ3LCJleHAiOjE3MTg4MjAyNDd9.vf53IqRi9zx4bsPQKH9t6J0ZuTyJmGmu8EHIbfQmqZc"
+  "api_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWJyYWhhbW9zYXplZTNAZ21haWwuY29tIiwiaWF0IjoxNzE4NzMzODQ3LCJleHAiOjE3MTg4MjAyNDd9.vf53IqRi9zx4bsPQKH9t6J0ZuTyJmGmu8EHIbfQmqZc"
 }
 ```
 
 response (invalid credentials) 401
 
-```
+```json
 {
-    "message": "Invalid credentials",
-    "error": "Unauthorized",
-    "statusCode": 401
+  "message": "Invalid credentials",
+  "error": "Unauthorized",
+  "statusCode": 401
 }
 ```
 
@@ -111,12 +112,12 @@ url - https://abraham-lendsqr-be-test.onrender.com/api/user/balance/1?currency_t
 
 response
 
-```
+```json
 {
-    "id": 1,
-    "email": "abrahamosazee3@gmail.com",
-    "balance": "60.00",
-    "currency_type": "dollar"
+  "id": 1,
+  "email": "abrahamosazee3@gmail.com",
+  "balance": "60.00",
+  "currency_type": "dollar"
 }
 ```
 
@@ -126,33 +127,33 @@ url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/create
 
 request body
 
-```
+```json
 {
-    "user_id": 2,
-    "currency_type": "dollar"
+  "user_id": 2,
+  "currency_type": "dollar"
 }
 ```
 
 response 200 OK
 
-```
+```json
 {
-    "id": 2,
-    "user_id": 2,
-    "currency_type": "dollar",
-    "balance": "0.00",
-    "created_at": "2024-06-18T18:11:09.000Z",
-    "updated_at": "2024-06-18T18:11:09.000Z"
+  "id": 2,
+  "user_id": 2,
+  "currency_type": "dollar",
+  "balance": "0.00",
+  "created_at": "2024-06-18T18:11:09.000Z",
+  "updated_at": "2024-06-18T18:11:09.000Z"
 }
 ```
 
 response (creating wallet with invalid user id) 404
 
-```
+```json
 {
-    "message": "user with this id not found",
-    "error": "Not Found",
-    "statusCode": 404
+  "message": "user with this id not found",
+  "error": "Not Found",
+  "statusCode": 404
 }
 ```
 
@@ -162,32 +163,32 @@ url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/fund
 
 request body
 
-```
+```json
 {
-    "user_id": 1,
-    "currency_type": "dollar",
-    "amount": 60
+  "user_id": 1,
+  "currency_type": "dollar",
+  "amount": 60
 }
 ```
 
 response 200 OK
 
-```
+```json
 {
-    "id": 1,
-    "user_id": 1,
-    "currency_type": "dollar",
-    "balance": "60.00"
+  "id": 1,
+  "user_id": 1,
+  "currency_type": "dollar",
+  "balance": "60.00"
 }
 ```
 
 response (wallet does not exist for user id) 404
 
-```
+```json
 {
-    "message": "wallet of dollar for user id does not exist, create a wallet to fund account",
-    "error": "Not Found",
-    "statusCode": 404
+  "message": "wallet of dollar for user id does not exist, create a wallet to fund account",
+  "error": "Not Found",
+  "statusCode": 404
 }
 ```
 
@@ -197,14 +198,13 @@ url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/transfer
 
 request body
 
-```
+```json
 {
-    "from_user_id": 1,
-    "to_user_id": 2,
-    "currency_type": "dollar",
-    "amount": 10
+  "from_user_id": 1,
+  "to_user_id": 2,
+  "currency_type": "dollar",
+  "amount": 10
 }
-
 ```
 
 response 200 OK
@@ -217,11 +217,11 @@ After transfering funds, you can check the user balance to ensure that funds was
 
 response (transfering from a user id that does not exist) 404
 
-```
+```json
 {
-    "message": "wallet does not exist for the sender user id, create a wallet to transfer fund",
-    "error": "Not Found",
-    "statusCode": 404
+  "message": "wallet does not exist for the sender user id, create a wallet to transfer fund",
+  "error": "Not Found",
+  "statusCode": 404
 }
 ```
 
@@ -241,33 +241,33 @@ url - https://abraham-lendsqr-be-test.onrender.com/api/wallet/withdraw
 
 request body
 
-```
+```json
 {
-    "user_id": 1,
-    "currency_type": "dollar",
-    "amount": 10
+  "user_id": 1,
+  "currency_type": "dollar",
+  "amount": 10
 }
 ```
 
 response 200 OK
 
-```
+```json
 {
-    "id": 1,
-    "user_id": 1,
-    "currency_type": "dollar",
-    "balance": "50.00",
-    "withdraw_fund": 10
+  "id": 1,
+  "user_id": 1,
+  "currency_type": "dollar",
+  "balance": "50.00",
+  "withdraw_fund": 10
 }
 ```
 
 response (withdraw from a user id that does not exist) 404
 
-```
+```json
 {
-    "message": "wallet with user id and currency type does not eixst",
-    "error": "Not Found",
-    "statusCode": 404
+  "message": "wallet with user id and currency type does not eixst",
+  "error": "Not Found",
+  "statusCode": 404
 }
 ```
 
