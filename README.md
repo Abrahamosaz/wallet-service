@@ -227,11 +227,11 @@ response (transfering from a user id that does not exist) 404
 
 response (transfering to a user id that does not exist) 404
 
-```
+```json
 {
-    "message": "wallet does not exist for the recepient user id, create a wallet to transfer fund",
-    "error": "Not Found",
-    "statusCode": 404
+  "message": "wallet does not exist for the recepient user id, create a wallet to transfer fund",
+  "error": "Not Found",
+  "statusCode": 404
 }
 ```
 
